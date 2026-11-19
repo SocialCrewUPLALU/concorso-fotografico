@@ -93,6 +93,8 @@ export default function Vote() {
       // Scrittura su Firestore (protetta dalle regole di sicurezza)
       await setDoc(doc(db, "votes", user.uid), {
         userId: user.uid,
+        userName: user.displayName || "Utente Google",
+        userEmail: user.email || "",
         selectedPhotos: allSelectedPhotos,
         createdAt: serverTimestamp()
       });
