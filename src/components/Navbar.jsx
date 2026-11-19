@@ -41,6 +41,17 @@ export default function Navbar({ setCurrentView }) {
             <span className="font-bold text-xl text-slate-800">Concorso Fotografico</span>
           </div>
 
+          <div className="flex items-center space-x-3">
+            <img 
+              src={`${import.meta.env.BASE_URL}images/logo.png`} 
+              alt="Social Crew Lurago d'Erba" 
+              className="w-10 h-10 rounded-full object-cover border-2 border-amber-400 shadow-sm"
+            />
+            <span className="font-extrabold text-slate-900 tracking-tight">
+              Concorso Fotografico <span className="text-amber-600">Social Crew</span>
+            </span>
+          </div>
+
           <div className="hidden md:flex items-center space-x-6">
             <button onClick={() => setCurrentView('home')} className="text-slate-600 hover:text-indigo-600 font-medium">Home</button>
             <button onClick={() => setCurrentView('gallery')} className="text-slate-600 hover:text-indigo-600 font-medium">Galleria</button>
