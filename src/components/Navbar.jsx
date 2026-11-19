@@ -1,6 +1,7 @@
+{/*
 import { useState, useEffect } from 'react';
 import { auth, googleProvider, signInWithPopup, signOut, onAuthStateChanged} from '../firebase/config';
-import { Camera, LogOut, Shield, Menu, X } from 'lucide-react';
+import { LogOut, Shield, Menu, X } from 'lucide-react';
 
 export default function Navbar({ setCurrentView }) {
   const [user, setUser] = useState(null);
@@ -36,11 +37,6 @@ export default function Navbar({ setCurrentView }) {
     <nav className="bg-white border-b border-slate-200 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
-          <div className="flex items-center cursor-pointer" onClick={() => setCurrentView('home')}>
-            <Camera className="h-8 w-8 text-indigo-600 mr-2" />
-            <span className="font-bold text-xl text-slate-800">Concorso Fotografico</span>
-          </div>
-
           <div className="flex items-center space-x-3">
             <img 
               src={`${import.meta.env.BASE_URL}images/logo.png`} 
@@ -48,7 +44,7 @@ export default function Navbar({ setCurrentView }) {
               className="w-10 h-10 rounded-full object-cover border-2 border-amber-400 shadow-sm"
             />
             <span className="font-extrabold text-slate-900 tracking-tight">
-              Concorso Fotografico <span className="text-amber-600">Social Crew</span>
+              Concorso Fotografico <span className="text-amber-600"></span>
             </span>
           </div>
 
@@ -99,6 +95,98 @@ export default function Navbar({ setCurrentView }) {
           )}
         </div>
       )}
+    </nav>
+  );
+}
+
+*/}
+
+import { Link, useLocation } from 'react-router-dom';
+import { Shield } from 'lucide-react';
+// Importa l'auth e lo stato utente se necessario
+
+export default function Navbar({ user, isAdmin, handleLogout, handleLogin }) {
+  const location = useLocation();
+
+  const isActive = (path) => location.pathname === path;
+
+  return (
+    <nav className="bg-white/90 backdrop-blur-md border-b-2 border-amber-200 sticky top-0 z-40 shadow-sm">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between h-16 items-center">
+          
+          {/* Logo e Titolo */}
+          <Link to="/" className="flex items-center space-x-3">
+            <div className="w-10 h-10 rounded-full bg-amber-400 border-2 border-slate-900 flex items-center justify-center font-black text-slate-900 shadow-sm">
+              SC
+            </div>
+            <div className="font-extrabold text-slate-900 tracking-tight text-lg sm:text-xl">
+              Social Crew <span className="text-amber-600">Lurago</span>
+            </div>
+          </Link>
+
+          {/* Link di Navigazione */}
+          <div className="hidden md:flex items-center space-x-2">
+            <Link
+              to="/"
+              className={`px-4 py-2 rounded-xl text-sm font-bold transition ${
+                isActive('/') ? 'bg-amber-400 text-slate-900 shadow-sm' : 'text-slate-700 hover:bg-amber-50'
+              }`}
+            >
+              Home
+            </Link>
+            <Link
+              to="/gallery"
+              className={`px-4 py-2 rounded-xl text-sm font-bold transition ${
+                isActive('/gallery') ? 'bg-amber-400 text-slate-900 shadow-sm' : 'text-slate-700 hover:bg-amber-50'
+              }`}
+            >
+              Galleria
+            </Link>
+            <Link
+              to="/vote"
+              className={`px-4 py-2 rounded-xl text-sm font-bold transition ${
+                isActive('/vote') ? 'bg-amber-400 text-slate-900 shadow-sm' : 'text-slate-700 hover:bg-amber-50'
+              }`}
+            >
+              Vota
+            </Link>
+            {isAdmin && (
+              <Link
+                to="/admin"
+                className={`px-4 py-2 rounded-xl text-sm font-bold transition flex items-center ${
+                  isActive('/admin') ? 'bg-slate-900 text-amber-300 shadow-sm' : 'text-slate-700 hover:bg-amber-50'
+                }`}
+              >
+                <Shield className="w-4 h-4 mr-1.5" /> Admin
+              </Link>
+            )}
+          </div>
+
+          {/* Autenticazione Google */}
+          <div>
+            {user ? (
+              <div className="flex items-center space-x-3">
+                <span className="text-xs font-bold text-slate-700 hidden sm:inline">{user.displayName}</span>
+                <button
+                  onClick={handleLogout}
+                  className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold rounded-xl transition border border-slate-300"
+                >
+                  Esci
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={handleLogin}
+                className="px-4 py-2 bg-slate-900 hover:bg-slate-800 text-amber-300 text-xs font-bold rounded-xl shadow-md transition"
+              >
+                Accedi con Google
+              </button>
+            )}
+          </div>
+
+        </div>
+      </div>
     </nav>
   );
 }
