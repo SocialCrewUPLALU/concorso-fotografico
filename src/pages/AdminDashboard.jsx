@@ -39,17 +39,34 @@ export default function AdminDashboard() {
   // Conversione dell'immagine locale del PC in Base64
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    if (file) {
-      if (file.size > 800000) { // Limite consigliato per Firestore (~800KB)
-        alert("L'immagine è troppo grande. Scegli un file inferiore a 800 KB.");
-        return;
-      }
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setImageBase64(reader.result);
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        const MAX_WIDTH = 1200;
+        let width = img.width;
+        let height = img.height;
+
+        if (width > MAX_WIDTH) {
+          height = Math.round((height * MAX_WIDTH) / width);
+          width = MAX_WIDTH;
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Converte in JPEG con qualità 0.8 (ottima qualità, peso sotto i 300 KB)
+        const compressedBase64 = canvas.toDataURL("image/jpeg", 0.8);
+        setImageBase64(compressedBase64);
       };
-      reader.readAsDataURL(file);
-    }
+      img.src = event.target.result;
+    };
+    reader.readAsDataURL(file);
   };
 
   const handleAddPhoto = async (e) => {
