@@ -2,7 +2,6 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
     
-    // Funzioni di supporto
     function isAuthenticated() {
       return request.auth != null;
     }
@@ -11,21 +10,17 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.token.admin == true;
     }
 
-    // Configurazione del concorso
-    match /config/contest {
-      allow read: if true;
-      allow write: if isAdmin();
-    }
-
-    // Fotografie: leggibili da tutti, modificabili solo dagli admin
     match /photos/{photoId} {
       allow read: if true;
       allow create, update, delete: if isAdmin();
     }
 
-    // Voti: ogni utente può scrivere il proprio voto UNA sola volta. Nessuno può modificarlo o cancellarlo.
     match /votes/{userId} {
-      allow read: if isAuthenticated() && (request.auth.uid == userId || isAdmin());
+      // Permettiamo agli admin di leggere e cancellare i voti per i test
+      allow read, delete: if isAdmin();
+      
+      // Gli utenti possono leggere il proprio voto
+      allow read: if isAuthenticated() && request.auth.uid == userId;
       
       allow create: if isAuthenticated() 
                     && request.auth.uid == userId 
@@ -33,7 +28,7 @@ service cloud.firestore {
                     && request.resource.data.selectedPhotos is list
                     && request.resource.data.selectedPhotos.size() == 15;
                     
-      allow update, delete: if false;
+      allow update: if false;
     }
   }
 }
