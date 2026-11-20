@@ -18,7 +18,7 @@ export default function Privacy() {
         </p>
         <h2 className="text-lg font-bold text-slate-900 pt-2">3. Contatti</h2>
         <p>
-          Per qualsiasi richiesta di cancellazione dei dati o informazione, puoi contattare l'amministratore all'indirizzo: <strong>davidemeneghini3@gmail.com</strong>.
+          Per qualsiasi richiesta di cancellazione dei dati o informazione, puoi contattare l'amministratore all'indirizzo: <strong>socialcrewuplalu@atomicmail.io</strong>.
         </p>
       </div>
     </div>
